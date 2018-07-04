@@ -38,11 +38,11 @@ const
     answer3 = new Answer('git -d branch', false),
     question3 = new Question('Как удалить удаленную (на удал. репо.) ветку?', answer1),
 
+    
     // создание вопросов для bash
     answer4 = new Answer('mkdir folder', true),
     question4 = new Question('Как создать папку?', answer1),
 
-    // создание вопросов для bash
     answer5 = new Answer('rm folder', false),
     question5 = new Question('Как удалить папку?', answer1),
 
