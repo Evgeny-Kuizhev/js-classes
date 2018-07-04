@@ -1,9 +1,14 @@
+class Answer {
+    constructor(title) {
+        this.title = title,
+        this.correct = true;
+    }
+}
+
 class Question {
-    constructor(title, trueAnswers, answer) {
+    constructor(title, answer) {
         this.title = title;
-        this.answer = {
-            correct: (trueAnswers.indexOf(answer) !== -1),
-        };
+        this.answer = answer;
     }
 }
 
@@ -23,39 +28,42 @@ class StudyCourse {
 
 // создание вопросов для гит
 let question = 'Как создать ветку?',
-    trueAnswers = ['git branch', 'git checkout -b'],
     answer = 'git branch';
-const qst1 = new Question(question, trueAnswers, answer);
+
+const answ1 = new Answer(answer),
+    qst1 = new Question(question, answ1);
 
 question = 'Как добавить файл в индекс',
-trueAnswers = ['git add file', 'git add .', 'git add *'],
 answer = 'git add *';
-const qst2 = new Question(question, trueAnswers, answer);
+const answ2 = new Answer(answer),
+    qst2 = new Question(question, answ2);
 
 question = 'Как удалить удаленную (на удал. репо.) ветку?',
-trueAnswers = ['git push origin --delete branch', 'git push origin :branch'],
 answer = 'git -d branch';
-const qst3 = new Question(question, trueAnswers, answer);
+const answ3 = new Answer(answer),
+    qst3 = new Question(question, answ3);
 
 // создание вопросов для bash
 question = 'Как создать папку?',
-trueAnswers = ['mkdir folder', 'mkdir -p folder'],
 answer = 'mkdir folder';
-const qst4 = new Question(question, trueAnswers, answer);
+const answ4 = new Answer(answer),
+    qst4 = new Question(question, answ4);
 
 question = 'Как удалить папку?',
-trueAnswers = ['rmdir folder', 'rm -rf folder'],
 answer = 'rm folder';
-const qst5 = new Question(question, trueAnswers, answer);
+const answ5 = new Answer(answer),
+    qst5 = new Question(question, answ5);
 
 
-// создание темы с вопросами
+// создание тем с вопросами
 const git = new Theme('git', qst1, qst2, qst3),
     bash = new Theme('bash', qst4, qst5);
 
-    
+
 // создание курса
 const newCourse = new StudyCourse('Основы гит и баш', git, bash);
 
 
 console.log(newCourse);
+
+
