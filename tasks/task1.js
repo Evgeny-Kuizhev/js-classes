@@ -1,7 +1,7 @@
 class Answer {
-    constructor(title) {
+    constructor(title, correct) {
         this.title = title,
-        this.correct = true;
+        this.correct = correct;
     }
 }
 
@@ -26,42 +26,34 @@ class StudyCourse {
     }
 }
 
-// создание вопросов для гит
-let question = 'Как создать ветку?',
-    answer = 'git branch';
 
-const answ1 = new Answer(answer),
-    qst1 = new Question(question, answ1);
+const
+    // создание вопросов для гит 
+    answer1 = new Answer('git branch', true),
+    question1 = new Question('Как создать ветку?', answer1),
 
-question = 'Как добавить файл в индекс',
-answer = 'git add *';
-const answ2 = new Answer(answer),
-    qst2 = new Question(question, answ2);
+    answer2 = new Answer('git add *', true),
+    question2 = new Question('Как добавить файл в индекс?', answer1),
 
-question = 'Как удалить удаленную (на удал. репо.) ветку?',
-answer = 'git -d branch';
-const answ3 = new Answer(answer),
-    qst3 = new Question(question, answ3);
+    answer3 = new Answer('git -d branch', false),
+    question3 = new Question('Как удалить удаленную (на удал. репо.) ветку?', answer1),
 
-// создание вопросов для bash
-question = 'Как создать папку?',
-answer = 'mkdir folder';
-const answ4 = new Answer(answer),
-    qst4 = new Question(question, answ4);
+    // создание вопросов для bash
+    answer4 = new Answer('mkdir folder', true),
+    question4 = new Question('Как создать папку?', answer1),
 
-question = 'Как удалить папку?',
-answer = 'rm folder';
-const answ5 = new Answer(answer),
-    qst5 = new Question(question, answ5);
+    // создание вопросов для bash
+    answer5 = new Answer('rm folder', false),
+    question5 = new Question('Как удалить папку?', answer1),
 
 
-// создание тем с вопросами
-const git = new Theme('git', qst1, qst2, qst3),
-    bash = new Theme('bash', qst4, qst5);
+    // создание тем с вопросами
+    git = new Theme('git', question1, question2, question3),
+    bash = new Theme('bash', question4, question5),
 
 
-// создание курса
-const newCourse = new StudyCourse('Основы гит и баш', git, bash);
+    // создание курса
+    newCourse = new StudyCourse('Основы гит и баш', git, bash);
 
 
 console.log(newCourse);
