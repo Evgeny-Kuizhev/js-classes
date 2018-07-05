@@ -33,18 +33,18 @@ const
     question1 = new Question('Как создать ветку?', answer1),
 
     answer2 = new Answer('git add *', true),
-    question2 = new Question('Как добавить файл в индекс?', answer1),
+    question2 = new Question('Как добавить файл в индекс?', answer2),
 
     answer3 = new Answer('git -d branch', false),
-    question3 = new Question('Как удалить удаленную (на удал. репо.) ветку?', answer1),
+    question3 = new Question('Как удалить удаленную (на удал. репо.) ветку?', answer3),
 
     
     // создание вопросов для bash
     answer4 = new Answer('mkdir folder', true),
-    question4 = new Question('Как создать папку?', answer1),
+    question4 = new Question('Как создать папку?', answer4),
 
     answer5 = new Answer('rm folder', false),
-    question5 = new Question('Как удалить папку?', answer1),
+    question5 = new Question('Как удалить папку?', answer5),
 
 
     // создание тем с вопросами
@@ -56,6 +56,11 @@ const
     newCourse = new StudyCourse('Основы гит и баш', git, bash);
 
 
-console.log(newCourse);
+// console.log(newCourse);
 
-
+module.exports = {
+    Answer,
+    Question,
+    Theme,
+    StudyCourse
+}
