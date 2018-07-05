@@ -73,7 +73,7 @@ class Director {
     }
 
     // ф-ция распределения проектов по отделам
-    destributeProjects() {
+    distributeProjects() {
 
         function setEmployees(employees, projects, deptProjects) { 
             // если у отдела есть разработчики
@@ -157,7 +157,7 @@ steve.manage(apple);
 const simuleteDays = (count, company) => {
     while (count--) {
         company.director.getProjects();
-        company.director.destributeProjects();
+        company.director.distributeProjects();
         company.director.hireEmployees();
     }
 }
