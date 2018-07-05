@@ -34,5 +34,5 @@ describe('task1', () => {
         it('создание объекта курса с темой', () => {
             assert(newCourse.title === 'node' && newCourse.themes[0] === express);
         });
-    })
+    });
 });
