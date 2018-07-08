@@ -1,6 +1,6 @@
 class Employee {
     constructor(special) {
-        this.id = Date.now();
+        this.id = Employee.count++;
         this.fired = false;
         this.skils = 0;
         this.special = special;
@@ -8,6 +8,7 @@ class Employee {
         this.currProject = null;
     }
 }
+Employee.count = 0;
 
 class Department {
     constructor() {
@@ -30,17 +31,27 @@ class TestDepartment extends Department {
     }
 }
 
+class Project {
+    constructor(complexity) {
+        this.id = Project.count++;
+        this.complexity = complexity;
+        this.daysLeftToComplete = complexity;
+    }
+}
+Project.count = 0;
+
 class Director {
     constructor(name) {
         this.name = name;
         this.mobileProjects = [];
         this.webProjects = [];
-        // this.employees = [];
     }
 
     // передача управления компанией директору
     manage(company) {  
-        this.company = company;
+        this.webDepartment = company.webDepartment;
+        this.mobileDepartment = company.mobileDepartment;
+        this.testDepartment = company.testDepartment;
     }
 
     // ф-ция генерайии проектов
@@ -59,11 +70,8 @@ class Director {
         for (let i = 0; i < countprojects; i++) {
             let complexity =  randint(1,3),
                 department = deps[randint(0,1)],
-                project = {
-                    'projectHas': department,
-                    'complexity': complexity,
-                    'daysLeft': complexity
-                }
+                project = new Project(complexity);
+            
             if (department === 'WebDepartment'){
                 this.webProjects.push(project)
             } else {
@@ -72,58 +80,115 @@ class Director {
         }
     }
 
+
     // ф-ция распределения проектов по отделам
     distributeProjects() {
-
-        function setEmployees(employees, projects, deptProjects) { 
-            // если у отдела есть разработчики
-            if ( [employees].lenght > 0 ) {
-                // проходимся по ним
-                [employees].forEach((el, inx) => {
-                // ищем разработчика без проекта
-                if (el.currProject === null && this[deptProjects].length > 0) {
+        // если у отдела есть разработчики
+        if ( this.webDepartment.employees.length > 0 ) {
+            // проходимся по ним
+            this.webDepartment.employees.some((el, inx, employees) => {
+                // если проектов нет, то выходим
+                if (!this.mobileProjects.length) return true;
+                
+                // иначе ищем разработчика без проекта
+                if (el.currProject === null) {
                     // назначаем проект разработчику и добавляем проект к веб отделу проектов
-                    [employees][inx].currProject = this[deptProjects].pop();
-                    [projects].push([employees][inx].currProject);
+                    this.webDepartment.employees[inx].currProject = this.webProjects.pop();
+                    this.webDepartment.employees[inx].skils++;
+                    // может не пригодится, пока что пусть будет
+                    this.webDepartment.projects.push(employees[inx].currProject);
                 }
-                }); 
-            }
+            }); 
         }
-        
-        setEmployees('this.company.webDepartment.employees', 'this.company.webDepartment.projects', 'webProjects');
-        setEmployees('this.company.mobileDepartment.employees', 'this.company.mobileDepartment.projects', 'mobileProjects');
 
-        // // если у отдела есть разработчики
-        // if ( this.company.webDepartment.employees.lenght > 0 ) {
-        //     // проходимся по ним
-        //    this.company.webDepartment.employees.forEach((el, inx, employees) => {
-        //        // ищем разработчика без проекта
-        //        if (el.currProject === null && this.webProjects.length > 0) {
-        //            // назначаем проект разработчику и добавляем проект к веб отделу проектов
-        //            employees[inx].currProject = this.webProjects.pop();
-        //            this.company.webDepartment.projects.push(employees[inx].currProject);
-        //        }
-        //    }); 
-        // }
-
-        // if (this.company.mobileDepartment.employees.lenght > 0) {
-        //     this.company.mobileDepartment.employees.forEach((el, inx, employees) => {
-        //         if (el.currProject === null && this.webProjects.length > 0) {
-        //             employees[inx].currProject = this.webProjects.pop();
-        //            this.company.mobileDepartment.projects.push(employees[inx].currProject);
-        //         }              
-        //     });
-        // }
-        
+        // тоже самое для мобильного отдела***********дописать*********
+        if (this.mobileDepartment.employees.length > 0) {
+            this.mobileDepartment.employees.some((el, inx, employees) => {
+                if (!this.mobileProjects.length) return true;
+                
+                if (el.currProject === null) {
+                    this.mobileDepartment.employees[inx].currProject = this.mobileProjects.pop();
+                    this.mobileDepartment.employees[inx].skils++;
+                    
+                    // может не пригодится, пока что пусть будет
+                    this.mobileDepartment.projects.push(employees[inx].currProject);
+                }
+            });
+        }
     }
 
     // ф-ция, которая нанимает сотрудников
     hireEmployees() {
        
-        // console.log(this.projects);
+        for (let index in this.mobileProjects) {
+            let newWorker = new Employee('mobile development');
+            this.mobileDepartment.employees.push(newWorker);
+        }
+        // console.log(this.company.mobileDepartment.employees);
 
+        for (let index in this.webProjects) {
+            this.webDepartment.employees.push(
+                new Employee('web development')
+            )
+            //console.log( this.company.webDepartment.employees.lenght);
+        }
 
+        // console.log(this.company.webDepartment.employees);
+        // console.log(this.company.mobileDepartment.employees);
+    }
 
+    // ф-ция уменьшающая дни на реализацию
+    reduceDay() {
+        
+        this.mobileDepartment.employees.forEach( (el, inx) => {
+            if (el.currProject !== null && el.currProject.daysLeftToComplete >= 0) {
+                if (el.currProject.daysLeftToComplete === 0) {
+                    // добавить код передачи проекта на тестирование
+                    
+                    el.currProject = null;
+                    this.mobileDepartment.employees[inx].currProject = null;
+                } else {
+                    this.mobileDepartment.employees[inx].currProject.daysLeftToComplete--;
+                }
+            } else if (el.currProject === null && el.daysIdel < 3) {
+                //console.log(this.mobileDepartment.employees[inx]);
+                this.mobileDepartment.employees[inx].daysIdel++;
+            } else if (el.daysIdel === 3) {
+                this.mobileDepartment.employees[inx].fired = true;
+            }
+        });
+
+        // console.log(this.webDepartment.employees);
+        for (let i in this.webDepartment.employees) {
+            console.log(this.webDepartment.employees[i])
+            if (this.webDepartment.employees[i] !== null &&
+                this.webDepartment.employees[i].currProject.daysLeftToComplete >=0) {
+                    if (this.webDepartment.employees[i].currProject.daysLeftToComplete === 0) {
+                        // добавить код передачи проекта на тестирование
+                    
+                        this.webDepartment.employees[i].currProject = null;
+                    } else {
+                        this.webDepartment.employees[i].currProject.daysLeftToComplete--;
+                    }
+                }
+        }
+        // this.webDepartment.employees.forEach( (el, inx) => {
+        //     console.log(el.currProject);
+        //     if (el.currProject !== null && el.currProject.daysLeftToComplete >= 0) {           
+        //         if (el.currProject.daysLeftToComplete === 0) {
+        //             // добавить код передачи проекта на тестирование
+                    
+        //             el.currProject = null;
+        //             this.webDepartment.employees[inx].currProject = null;
+        //         } else {
+        //             this.webDepartment.employees[inx].currProject.daysLeftToComplete--;
+        //         }
+        //     } else if (el.currProject === null && el.daysIdel < 3) {
+        //         this.webDepartment.employees[inx].daysIdel++;
+        //     } else if (el.daysIdel === 3) {
+        //         this.webDepartment.employees[inx].fired = true;
+        //     }
+        // });
     }
 }
 
@@ -138,45 +203,36 @@ class Company {
 }
 
 const 
+    // создание отделов
+    webDept = new WebDepartment(),
+    mobileDept = new MobileDepartment(),
+    testDept = new TestDepartment(),
 
-
-// создание отделов
-webDept = new WebDepartment(),
-mobileDept = new MobileDepartment(),
-testDept = new TestDepartment(),
-
-
-// создание сомпании
-steve = new Director('Steve Jobs'),
-apple = new Company('Apple', steve, webDept, mobileDept, testDept);
+    // создание сомпании
+    steve = new Director('Steve Jobs'),
+    apple = new Company('Apple', steve, webDept, mobileDept, testDept);
 
 steve.manage(apple);
 // console.log(steve.company)
 
 
 const simuleteDays = (count, company) => {
+    // сначала директор получает и распределяет проекты
+    company.director.getProjects();
+    company.director.distributeProjects();
+    count--;
     while (count--) {
+        // на следующий день директор нанимает разрабов для вчерашних проетов
+        company.director.hireEmployees();
         company.director.getProjects();
         company.director.distributeProjects();
-        company.director.hireEmployees();
+        company.director.reduceDay();
     }
 }
 
-const days = 1;
+const days = 5;
 simuleteDays(days, apple);
 
-console.dir(apple);
-
-// // сотрудники для web отдела
-// petya = new Employee('Petya'),
-// vasya = new Employee('Vasya'),
-// dasha = new Employee('Dasha'),
-
-// // сотрудники для отдела моб. разработки
-// kolya = new Employee('Kolay'),
-// polya = new Employee('Polya'),
-// evgeny = new Employee('Evgeny'),
-
-// // сотрудники для QA отдела
-// sasha = new Employee('Sasha'),
-// marina = new Employee('Marina'),
+console.log(apple.webDepartment.employees);
+//console.log(apple.webDepartment.employees);
+// console.dir(apple);
