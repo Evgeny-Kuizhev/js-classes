@@ -28,7 +28,7 @@ class MobileDepartment extends Department {
                     // добавляем разраба с проектом к занятым
                     this.busyEmployees.push(worker);
                 }
-                // готовим id проектов для их удаления
+                // сохраняем id проектов для послеующего удаления занятых проектов
                 projectsId[projects[inx].id] = true;
             }
         }
