@@ -1,6 +1,5 @@
 class Department {
     constructor() {
-        this.projects = [];
         this.freeEmployees = [];
         this.busyEmployees = [];
         this.firedEmployees = [];
