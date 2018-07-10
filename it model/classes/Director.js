@@ -2,7 +2,6 @@ const
     { Project } = require('./Project'),
     { Employee } = require('./Employee');
 
-
 class Director {
     constructor(name) {
         this.name = name;
@@ -11,14 +10,12 @@ class Director {
         this.completedProjects = [];
         this.testingProjects = [];
     }
-
     // передача управления компанией директору
     manage(company) {  
         this.webDepartment = company.webDepartment;
         this.mobileDepartment = company.mobileDepartment;
         this.testDepartment = company.testDepartment;
     }
-
     // ф-ция генерации проектов
     getProjects() {
         // функция генерации случайного числа в промежутке
@@ -44,7 +41,6 @@ class Director {
             }
         }
     }
-
     // ф-ция распределения проектов по отделам
     distributeProjects() {
         // передаем проекты на распределение веб отделу
@@ -53,8 +49,7 @@ class Director {
         this.mobileDepartment.distributeProjects(this.mobileProjects);
 
         this.testDepartment.distributeProjects(this.testingProjects);
-    }
-    
+    }    
     // ф-ция, которая нанимает сотрудников
     hireEmployees() {
         // так как на 1 проект приходится 1 и более разработчиков
@@ -82,22 +77,21 @@ class Director {
             }
         }
     }
-
     // ф-ция уменьшающая дни на реализацию
     reduceDay() {
         this.webDepartment.reduceDayOfWorker();
         this.mobileDepartment.reduceDayOfWorker();
         this.testDepartment.reduceDayOfWorker();
     }
-
+    // удалить сотрудника с самымм низким опытом
     fireWorker() {
-       
+        // удаляет сотрудника
         function fire(department, index) {
             const worker = department.freeEmployees.splice(index, 1)[0];
             worker.fired = true;
             department.firedEmployees.push(worker);
         }
-
+        // сравнивает сотрудников
         function compareSkils(dept1, inx1, dept2, inx2) {
             if (dept1.freeEmployees[inx1].skils < dept2.freeEmployees[inx2].skils) {
                 return [ dept1, inx1 ];
@@ -150,7 +144,7 @@ class Director {
             fire(...worker);
         }
     }
-
+    // получить статистику на текущий момент
     getStatistik() {
         const firedEmployees = this.webDepartment.freeEmployees.length +
             this.mobileDepartment.firedEmployees.length + 
