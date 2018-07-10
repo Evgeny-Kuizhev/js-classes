@@ -40,5 +40,5 @@ const simuleteDays = (count, company) => {
     return company.director.getStatistik();
 }
 
-const days = 116;
+const days = 261;
 console.log(simuleteDays(days, apple));
