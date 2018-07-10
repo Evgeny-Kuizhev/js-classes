@@ -16,7 +16,13 @@ const
     steve = new Director('Steve Jobs'),
     apple = new Company('Apple', steve, webDept, mobileDept, testDept);
 
+// передача упр-ния коспанией директору
 steve.manage(apple);
+// отделы получают доступ к проектам готовым к тестированию
+webDept.getTestingProject(steve.testingProjects);
+mobileDept.getTestingProject(steve.testingProjects);
+// отдел тестирования получает доступ к завершеным проектам
+testDept.getCompletedProjects(steve.completedProjects);
 
 
 const simuleteDays = (count, company) => {
@@ -31,12 +37,8 @@ const simuleteDays = (count, company) => {
         company.director.reduceDay();
         company.director.fireWorker();
     }
+    return company.director.getStatistik();
 }
 
 const days = 116;
-simuleteDays(days, apple);
-
-// console.log(apple.webDepartment.firedEmployees);
-// console.log(apple.mobileDepartment.firedEmployees);
-
-console.log('END');
+console.log(simuleteDays(days, apple));

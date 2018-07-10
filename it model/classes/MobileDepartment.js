@@ -5,26 +5,35 @@ class MobileDepartment extends Department {
     constructor() {
         super();
     }
+
+    getTestingProject(projects) {
+        this.testingProjects = projects;
+    }
+
     // получаем проекты от директора
     distributeProjects(projects) {
+        const projectsId = {};
         // проходимся по проектам
-        while (projects.length) {
+        for (let inx in projects) {
             // если свободных разрабов нет выходим
-            if (!this.freeEmploees.length) return;
-
-            // отделяем проект и разработчика
-            let project = projects.pop(),
-                worker = this.freeEmploees.pop();
-            
-            // добавляем разраба с проектом к занятым
-            if (project === undefined) {
-                console.log(project);
+            if (!this.freeEmployees.length) return;
+            // проверяем хватает ли сотрудников для сложности проекта
+            if (this.freeEmployees.length >= projects[inx].complexity) {
+                // назначаем проект сотрудникам
+                for (let i = 0; i < projects[inx].complexity; i++) {
+                    const worker = this.freeEmployees.pop();
+                    worker.currProject = projects[inx];
+                    worker.skils++;
+                    worker.daysIdle = 0;
+                    // добавляем разраба с проектом к занятым
+                    this.busyEmployees.push(worker);
+                }
+                // готовим id проектов для их удаления
+                projectsId[projects[inx].id] = true;
             }
-            worker.currProject = project;
-            worker.skils++;
-            worker.daysIdle = 0;
-            this.busyEmployees.push(worker);
         }
+        // оставляем только незанятые проекты
+        projects = projects.filter(el => !projectsId.hasOwnProperty(el.id));
     }
 }
 

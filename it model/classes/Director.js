@@ -8,6 +8,8 @@ class Director {
         this.name = name;
         this.mobileProjects = [];
         this.webProjects = [];
+        this.completedProjects = [];
+        this.testingProjects = [];
     }
 
     // передача управления компанией директору
@@ -45,77 +47,119 @@ class Director {
 
     // ф-ция распределения проектов по отделам
     distributeProjects() {
-        // console.log(this.webProjects)
         // передаем проекты на распределение веб отделу
         this.webDepartment.distributeProjects(this.webProjects);
 
-
-        // future functional*************************
         this.mobileDepartment.distributeProjects(this.mobileProjects);
-    }
 
+        this.testDepartment.distributeProjects(this.testingProjects);
+    }
+    
     // ф-ция, которая нанимает сотрудников
     hireEmployees() {
-       
-        for (let _ in this.mobileProjects) {
-            let newWorker = new Employee('mobile development');
-            this.mobileDepartment.addNewEmployee(newWorker);
+        // так как на 1 проект приходится 1 и более разработчиков
+        // то нанимаем разработчиков относительно сложности проектов
+        for (let inx in this.mobileProjects) {
+            for (let i = 0; i < this.mobileProjects[inx].complexity; i++){
+                let newWorker = new Employee('mobile development');
+                this.mobileDepartment.addNewEmployee(newWorker);
+            }
         }
-
+        // прямая зависимость 1 проект = 1 разраотчик
         for (let _ in this.webProjects) {
             let newWorker = new Employee('web development');
             this.webDepartment.addNewEmployee(newWorker);
+        }
+        // тестировщикам на тестирование нужн все 1 день,
+        // поэтому их становится очень много, следовательно
+        // увольняются только они, чтобы статистика была лучше
+        // напимаем тестировщиков, если проектов больше 5
+        if (this.testingProjects.length > 5) {
+            for (let index in this.testingProjects) {
+                let newWorker = new Employee('QA development');
+                this.testDepartment.addNewEmployee(newWorker);
+                if (index > this.testingProjects.length/3) break;
+            }
         }
     }
 
     // ф-ция уменьшающая дни на реализацию
     reduceDay() {
-
         this.webDepartment.reduceDayOfWorker();
         this.mobileDepartment.reduceDayOfWorker();
+        this.testDepartment.reduceDayOfWorker();
     }
 
     fireWorker() {
-        // ф-ция возвращает возможного кандидата на увольнение
-        function checkWorkers(workers) {
-            const maxDaysIdle = 3;
-            let [minSkils, index] = [10000, -1];
-            // проходимся по сотрудникам
-            for (let i in workers) {
-                // если дни безделия не достигли мах, то увелич.
-                if (workers[i].daysIdle < maxDaysIdle) {
-                    workers[i].daysIdle++;
-                } else {
-                    // если сотрудник отдыхает более 3-х дней
-                    // то он возможный кандидат на увольнение
-                    workers[i].daysIdle++;
-                    // ищем разработчика с самым маленьким опытом
-                    if (workers[i].skils < minSkils) {
-                        minSkils = workers[i].skils;
-                        index = i;
-                    }
-                }
+       
+        function fire(department, index) {
+            const worker = department.freeEmployees.splice(index, 1)[0];
+            worker.fired = true;
+            department.firedEmployees.push(worker);
+        }
+
+        function compareSkils(dept1, inx1, dept2, inx2) {
+            if (dept1.freeEmployees[inx1].skils < dept2.freeEmployees[inx2].skils) {
+                return [ dept1, inx1 ];
+            } else {
+                return [ dept2, inx2 ];
             }
-            return index;
         }
 
-        // проверка сотрудников из 2-х отделов
-        const webInx = checkWorkers(this.webDepartment.freeEmploees),
-            mobileInx = checkWorkers(this.mobileDepartment.freeEmploees);
+        // проверка сотрудников всех отделов
+        const webInx = this.webDepartment.checkWorkers(),
+            mobileInx = this.mobileDepartment.checkWorkers(),
+            testInx = this.testDepartment.checkWorkers();
+
         // никого не увольняем
-        if (webInx === -1 && mobileInx === -1) return;
-        // увольням из мобильного отдела
+        if (webInx === -1 && mobileInx === -1 && testInx === -1) return;
+        
+        // если нет сотрудников на увольнение из веб отдела
         if (webInx === -1) {
-            const worker = this.mobileDepartment.freeEmploees.splice(mobileInx, 1)[0];
-            worker.fired = true;
-            this.mobileDepartment.firedEmployees.push(worker);
-        } else {
-            // иначе увольняем из веб отдела
-            const worker = this.webDepartment.freeEmploees.splice(webInx, 1)[0];
-            worker.fired = true;
-            this.webDepartment.firedEmployees.push(worker);
+            // и нет из моб. отдела
+            if (mobileInx === -1) {
+                // удаляем из отдела тестирования
+                fire(this.testDepartment, testInx);
+            } else if (testInx === -1) {
+                // увольняем из мобильного
+                fire(this.mobileDepartment, mobileInx);
+            } else {
+                //  иначе сравниваем навыки и увольняем
+                const worker = compareSkils(this.mobileDepartment, mobileInx, this.testDepartment, testInx);
+                fire(...worker);
+            }
         }
+        // и нет сотрудников на увольнение из мобильного
+        else if (mobileInx === -1) {
+            if (testInx === -1) {
+                fire(this.webDepartment, webInx);
+            } else {
+                const worker = compareSkils(this.webDepartment, webInx, this.testDepartment, testInx);
+                fire(...worker);
+            }
+        } 
+        // и нет сотрудников на увольнение из отдела тестирование
+        else if (testInx === -1) {
+            const worker = compareSkils(this.webDepartment, webInx, this.mobileDepartment, mobileInx);
+            fire(...worker);
+        } 
+        // иначе есть претенденты на увольнение из всех отделов
+        else {
+            let worker = compareSkils(this.webDepartment, webInx, this.mobileDepartment, mobileInx);
+            worker = compareSkils(...worker, this.testDepartment, testInx);
+            fire(...worker);
+        }
+    }
 
+    getStatistik() {
+        const firedEmployees = this.webDepartment.freeEmployees.length +
+            this.mobileDepartment.firedEmployees.length + 
+            this.testDepartment.firedEmployees.length;
+        return {
+            completedProjects: this.completedProjects.length,
+            hiredEmployees: Employee.count,
+            firedEmployees
+        }
     }
 }
 
