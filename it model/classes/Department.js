@@ -20,7 +20,7 @@ class Department {
             let project = projects.pop(),
                 worker = this.freeEmployees.pop();
             
-            // добавляем разрабу проект и увеличю скил
+            // добавляем разрабу проект и увеличиваем скил
             worker.currProject = project;
             worker.skils++;
             worker.daysIdle = 0;
