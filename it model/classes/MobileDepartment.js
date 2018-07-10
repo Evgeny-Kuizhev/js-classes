@@ -12,7 +12,7 @@ class MobileDepartment extends Department {
 
     // получаем проекты от директора
     distributeProjects(projects) {
-        const projectsId = {};
+        const projectsId = [];
         // проходимся по проектам
         for (let inx in projects) {
             // если свободных разрабов нет выходим
@@ -29,11 +29,11 @@ class MobileDepartment extends Department {
                     this.busyEmployees.push(worker);
                 }
                 // сохраняем id проектов для послеующего удаления занятых проектов
-                projectsId[projects[inx].id] = true;
+                projectsId[projects[inx].id] = projects[inx].id;
             }
         }
         // оставляем только незанятые проекты
-        projects = projects.filter(el => !projectsId.hasOwnProperty(el.id));
+        projects = projects.filter(el => !(el.id === projectsId[el.id]));
     }
 }
 
