@@ -16,7 +16,7 @@ const
     steve = new Director('Steve Jobs'),
     apple = new Company('Apple', steve, webDept, mobileDept, testDept);
 
-// передача упр-ния коспанией директору
+// передача упр-ния компанией директору
 steve.manage(apple);
 // отделы получают доступ к проектам готовым к тестированию
 webDept.getTestingProject(steve.testingProjects);
@@ -40,5 +40,5 @@ const simuleteDays = (count, company) => {
     return company.director.getStatistik();
 }
 
-const days = 261;
+const days = 26;
 console.log(simuleteDays(days, apple));
