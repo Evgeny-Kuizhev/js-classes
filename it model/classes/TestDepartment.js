@@ -34,7 +34,7 @@ class TestDepartment extends Department {
         // если сть свободные программисты, то добавляем их
         if (freeArr.length) {
             this.freeEmployees.push(...freeArr);
-        } 
+        }
         this.busyEmployees = busyArr;
     }
 }
