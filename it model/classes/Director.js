@@ -91,57 +91,37 @@ class Director {
             worker.fired = true;
             department.firedEmployees.push(worker);
         }
-        // сравнивает сотрудников
-        function compareSkils(dept1, inx1, dept2, inx2) {
-            if (dept1.freeEmployees[inx1].skils < dept2.freeEmployees[inx2].skils) {
-                return [ dept1, inx1 ];
-            } else {
-                return [ dept2, inx2 ];
-            }
-        }
 
         // проверка сотрудников всех отделов
         const webInx = this.webDepartment.checkWorkers(),
             mobileInx = this.mobileDepartment.checkWorkers(),
             testInx = this.testDepartment.checkWorkers();
-
-        // никого не увольняем
-        if (webInx === -1 && mobileInx === -1 && testInx === -1) return;
-        
-        // если нет сотрудников на увольнение из веб отдела
-        if (webInx === -1) {
-            // и нет из моб. отдела
-            if (mobileInx === -1) {
-                // удаляем из отдела тестирования
-                fire(this.testDepartment, testInx);
-            } else if (testInx === -1) {
-                // увольняем из мобильного
-                fire(this.mobileDepartment, mobileInx);
-            } else {
-                //  иначе сравниваем навыки и увольняем
-                const worker = compareSkils(this.mobileDepartment, mobileInx, this.testDepartment, testInx);
-                fire(...worker);
-            }
-        }
-        // и нет сотрудников на увольнение из мобильного
-        else if (mobileInx === -1) {
-            if (testInx === -1) {
-                fire(this.webDepartment, webInx);
-            } else {
-                const worker = compareSkils(this.webDepartment, webInx, this.testDepartment, testInx);
-                fire(...worker);
-            }
-        } 
-        // и нет сотрудников на увольнение из отдела тестирование
-        else if (testInx === -1) {
-            const worker = compareSkils(this.webDepartment, webInx, this.mobileDepartment, mobileInx);
-            fire(...worker);
-        } 
-        // иначе есть претенденты на увольнение из всех отделов
-        else {
-            let worker = compareSkils(this.webDepartment, webInx, this.mobileDepartment, mobileInx);
-            worker = compareSkils(...worker, this.testDepartment, testInx);
-            fire(...worker);
+        // подготовка массива для сортировки
+        let workers = [
+            { index: webInx, dep: this.webDepartment }, 
+            { index: mobileInx, dep: this.mobileDepartment },
+            { index: testInx, dep: this.testDepartment }
+            ];
+        // оставляем только претендентов на увольнение
+        workers = workers.filter(el => el.index !== -1);
+        // если их нет выходим
+        if (!workers.length) return;
+        // если 1, то увольняем 1 
+        if (workers.length === 1) {
+            fire(workers[0].dep, workers[0].index);
+        } else {
+            // иначе выбираем самого неопытного
+            workers.sort( (a, b) => {
+                // задаем функцию ставнения для метода
+                if (a.dep.freeEmployees[a.index].skils > b.dep.freeEmployees[b.index].skils) {
+                    return 1;
+                } else if (a.dep.freeEmployees[a.index].skils == b.dep.freeEmployees[b.index].skils) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            });
+            fire(workers[0].dep, workers[0].index);
         }
     }
     // получить статистику на текущий момент
