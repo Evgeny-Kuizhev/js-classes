@@ -65,7 +65,7 @@ class Director {
             let newWorker = new Employee('web development');
             this.webDepartment.addNewEmployee(newWorker);
         }
-        // тестировщикам на тестирование нужн все 1 день,
+        // тестировщикам на тестирование нужен всего 1 день,
         // поэтому их становится очень много, следовательно
         // увольняются только они, чтобы статистика была лучше
         // напимаем тестировщиков, если проектов больше 5
@@ -146,7 +146,7 @@ class Director {
     }
     // получить статистику на текущий момент
     getStatistik() {
-        const firedEmployees = this.webDepartment.freeEmployees.length +
+        const firedEmployees = this.webDepartment.firedEmployees.length +
             this.mobileDepartment.firedEmployees.length + 
             this.testDepartment.firedEmployees.length;
         return {
