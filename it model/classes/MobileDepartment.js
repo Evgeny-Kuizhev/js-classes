@@ -10,30 +10,36 @@ class MobileDepartment extends Department {
         this.testingProjects = projects;
     }
 
-    // получаем проекты от директора
     distributeProjects(projects) {
-        const projectsId = [];
+        const leftProjects = [];
         // проходимся по проектам
-        for (let inx in projects) {
+        while (projects.length) {
             // если свободных разрабов нет выходим
-            if (!this.freeEmployees.length) return;
-            // проверяем хватает ли сотрудников для сложности проекта
-            if (this.freeEmployees.length >= projects[inx].complexity) {
-                // назначаем проект сотрудникам
-                for (let i = 0; i < projects[inx].complexity; i++) {
-                    const worker = this.freeEmployees.pop();
-                    worker.currProject = projects[inx];
+            if (!this.freeEmployees.length) break;
+
+            // отделяем проект и разработчика
+            let project = projects.pop();
+            // если прграммистов хватает для сложности проекта
+            if (this.freeEmployees.length >= project.complexity) {
+                // то назначаем проект программиста, тносительно сложности
+                for (let i = 0; i < project.complexity; i++) {
+                    let worker = this.freeEmployees.pop();
+                    // добавляем разрабу проект и увеличиваем скил
+                    worker.currProject = project;
                     worker.skils++;
                     worker.daysIdle = 0;
                     // добавляем разраба с проектом к занятым
                     this.busyEmployees.push(worker);
                 }
-                // сохраняем id проектов для послеующего удаления занятых проектов
-                projectsId[projects[inx].id] = projects[inx].id;
+            } else {
+                // собираем не разданные проекты
+                leftProjects.push(project);
             }
+            
         }
-        // оставляем только незанятые проекты
-        projects = projects.filter(el => !(el.id === projectsId[el.id]));
+        // присваиваем проектам, оставшиеся проекты
+        projects.length = 0;
+        projects.push(...leftProjects);
     }
 }
 
