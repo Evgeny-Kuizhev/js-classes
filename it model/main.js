@@ -1,28 +1,26 @@
 const 
-    { WebDepartment } = require('./classes/WebDepartment'),
-    { MobileDepartment } = require('./classes/MobileDepartment'),
-    { TestDepartment } = require('./classes/TestDepartment'),
     { Director } = require('./classes/Director'),
-    { Company } = require('./classes/Company');
+    { Company } = require('./classes/Company'),
+    { setTestingProject, distributeProjects } = require('./mobWebFuncs'),
+    { setCompletedProjects, reduceDayOfWorker } = require('./testingFuncs');
 
 
-const 
-    // создание отделов
-    webDept = new WebDepartment(),
-    mobileDept = new MobileDepartment(),
-    testDept = new TestDepartment(),
-
+const
     // создание сомпании
     steve = new Director('Steve Jobs'),
-    apple = new Company('Apple', steve, webDept, mobileDept, testDept);
+    apple = new Company('Apple', steve);
 
+// создание отделов
+apple.createDept('webDepartment', setTestingProject);
+apple.createDept('mobileDepartment', setTestingProject, distributeProjects);
+apple.createDept('testDepartment', setCompletedProjects, distributeProjectsFunc=null, reduceDayOfWorker );
 // передача упр-ния компанией директору
 steve.manage(apple);
 // отделы получают доступ к проектам готовым к тестированию
-webDept.getTestingProject(steve.testingProjects);
-mobileDept.getTestingProject(steve.testingProjects);
+apple.webDepartment.setTestingProject(steve.testingProjects);
+apple.mobileDepartment.setTestingProject(steve.testingProjects);
 // отдел тестирования получает доступ к завершеным проектам
-testDept.getCompletedProjects(steve.completedProjects);
+apple.testDepartment.setCompletedProjects(steve.completedProjects);
 
 
 const simuleteDays = (count, company) => {
@@ -50,8 +48,6 @@ const simuleteDays = (count, company) => {
 const days = 219;
 
 console.log(simuleteDays(days, apple));
-
-
 
 
 function getAllEmployees(company) {

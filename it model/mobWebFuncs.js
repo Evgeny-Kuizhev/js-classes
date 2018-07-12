@@ -33,3 +33,8 @@ function distributeProjects(projects) {
 function setTestingProject(projects) {
     this.testingProjects = projects;
 }
+
+module.exports = {
+    distributeProjects,
+    setTestingProject
+}
