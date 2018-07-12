@@ -58,6 +58,8 @@ class Department {
         const maxDaysIdle = 3,
             workers = this.freeEmployees;
         let [minSkils, index] = [Infinity, -1];
+        // дописать со скилами
+        //********************** */
         // проходимся по сотрудникам
         for (let i in workers) {
             // если дни безделия не достигли мах, то увелич.

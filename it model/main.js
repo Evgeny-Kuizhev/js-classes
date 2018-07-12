@@ -17,14 +17,9 @@ const
     apple = new Company('Apple', steve, webDept, mobileDept, testDept);
 
 // передача упр-ния компанией директору
-
-function getTestingProject(projects) {
-    this.testingProjects = projects;
-}
-apple.createDept('webDepartment', getTestingProject);
 steve.manage(apple);
-apple.webDepartment.getTestingProject(steve.testingProjects);
 // отделы получают доступ к проектам готовым к тестированию
+webDept.getTestingProject(steve.testingProjects);
 mobileDept.getTestingProject(steve.testingProjects);
 // отдел тестирования получает доступ к завершеным проектам
 testDept.getCompletedProjects(steve.completedProjects);
