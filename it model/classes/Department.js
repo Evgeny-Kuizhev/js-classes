@@ -12,10 +12,7 @@ class Department {
     // получаем проекты от директора
     distributeProjects(projects) {
         // проходимся по проектам
-        while (projects.length) {
-            // если свободных разрабов нет выходим
-            if (!this.freeEmployees.length) return;
-
+        while (projects.length && this.freeEmployees.length) {
             // отделяем проект и разработчика
             let project = projects.pop(),
                 worker = this.freeEmployees.pop();
@@ -60,7 +57,9 @@ class Department {
         // максимальное кол-во дней безделия
         const maxDaysIdle = 3,
             workers = this.freeEmployees;
-        let [minSkils, index] = [100000, -1];
+        let [minSkils, index] = [Infinity, -1];
+        // дописать со скилами
+        //********************** */
         // проходимся по сотрудникам
         for (let i in workers) {
             // если дни безделия не достигли мах, то увелич.
@@ -77,6 +76,7 @@ class Department {
                 }
             }
         }
+        // изменить ф-цию
         return index;
     }
 }
