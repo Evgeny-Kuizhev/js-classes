@@ -6,6 +6,7 @@ class MobileDepartment extends Department {
         super();
     }
 
+    // set
     getTestingProject(projects) {
         this.testingProjects = projects;
     }

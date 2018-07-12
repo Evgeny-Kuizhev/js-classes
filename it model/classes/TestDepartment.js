@@ -7,6 +7,7 @@ class TestDepartment extends Department {
 
     }
 
+    // set
     getCompletedProjects(projects) {
         this.completedProjects = projects;
     }
