@@ -7,8 +7,8 @@ class Company {
     }
 
     createDept(name, setProjectsFunc, distributeProjectsFunc, reduceDayFunc) {
-        // cпроверка обязательных параметров
-        if (name === undefined || setProjectsFunc === undefined) return null;
+        // проверка обязательных параметров
+        if (!name || !setProjectsFunc) return null;
         // иначе создаем отдел
         this[name] = new Department();
         this[name][setProjectsFunc.name] = setProjectsFunc;
