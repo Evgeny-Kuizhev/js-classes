@@ -5,17 +5,17 @@ function Company(name, director) {
     this.director = director;
 }
 
-Company.prototype.createDept = function(name, setProjectsFunc, distributeProjectsFunc=null, reduceDayFunc=null) {
+Company.prototype.createDept = function(name, setProjectsFunc, distributeProjectsFunc, reduceDayFunc) {
     // cпроверка обязательных параметров
     if (name === undefined || setProjectsFunc === undefined) return null;
     // иначе создаем отдел
     this[name] = new Department();
     this[name][setProjectsFunc.name] = setProjectsFunc;
     // если переданы другие фун-ции, то назначаем их
-    if (reduceDayFunc !== null) {
+    if (!!reduceDayFunc) {
         this[name].reduceDayOfWorker = reduceDayFunc;
     }
-    if (distributeProjectsFunc !== null) {
+    if (!!distributeProjectsFunc) {
         this[name].distributeProjects = distributeProjectsFunc;
     }
 }
