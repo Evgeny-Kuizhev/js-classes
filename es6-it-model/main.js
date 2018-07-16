@@ -13,7 +13,7 @@ const
 // создание отделов
 apple.createDept('webDepartment', setTestingProject);
 apple.createDept('mobileDepartment', setTestingProject, distributeProjects);
-apple.createDept('testDepartment', setCompletedProjects, distributeProjectsFunc=null, reduceDayOfWorker );
+apple.createDept('testDepartment', setCompletedProjects, null, reduceDayOfWorker );
 // передача упр-ния компанией директору
 steve.manage(apple);
 // отделы получают доступ к проектам готовым к тестированию
