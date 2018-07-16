@@ -7,7 +7,7 @@ class Company {
     }
 
     createDept(name, setProjectsFunc, distributeProjectsFunc, reduceDayFunc) {
-        // cпроверка обязательных параметров
+        // проверка обязательных параметров
         if (!name || !setProjectsFunc) return null;
         // иначе создаем отдел
         this[name] = new Department();
