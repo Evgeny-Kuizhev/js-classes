@@ -1,8 +1,7 @@
-const 
-    { Director } = require('./classes/Director'),
-    { Company } = require('./classes/Company'),
-    { setTestingProject, distributeProjects } = require('./mobWebFuncs'),
-    { setCompletedProjects, reduceDayOfWorker } = require('./testingFuncs');
+import { Director } from './classes/Director';
+import { Company } from './classes/Company';
+import { setTestingProject, distributeProjects } from './mobWebFuncs';
+import { setCompletedProjects, reduceDayOfWorker } from './testingFuncs';
 
 
 const
@@ -11,16 +10,17 @@ const
     apple = new Company('Apple', steve);
 
 // создание отделов
-apple.createDept('webDepartment', setTestingProject);
-apple.createDept('mobileDepartment', setTestingProject, distributeProjects);
-apple.createDept('testDepartment', setCompletedProjects, null, reduceDayOfWorker );
+const [webD, mobD, testD] = ['webDepartment', 'mobileDepartment', 'testDepartment'];
+apple.createDept(webD, setTestingProject, null, null);
+apple.createDept(mobD, setTestingProject, distributeProjects, null);
+apple.createDept(testD, setCompletedProjects, null, reduceDayOfWorker );
 // передача упр-ния компанией директору
-steve.manage(apple);
+steve.manage(apple, webD, mobD, testD);
 // отделы получают доступ к проектам готовым к тестированию
-apple.webDepartment.setTestingProject(steve.testingProjects);
-apple.mobileDepartment.setTestingProject(steve.testingProjects);
+apple[webD].setTestingProject(steve.testingProjects);
+apple[mobD].setTestingProject(steve.testingProjects);
 // отдел тестирования получает доступ к завершеным проектам
-apple.testDepartment.setCompletedProjects(steve.completedProjects);
+apple[testD].setCompletedProjects(steve.completedProjects);
 
 
 const simuleteDays = (count, company) => {
