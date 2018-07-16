@@ -6,17 +6,17 @@ class Company {
         this.director = director;
     }
 
-    createDept(name, setProjectsFunc, distributeProjectsFunc=null, reduceDayFunc=null) {
-        // cпроверка обязательных параметров
-        if (name === undefined || setProjectsFunc === undefined) return null;
+    createDept(name, setProjectsFunc, distributeProjectsFunc, reduceDayFunc) {
+        // проверка обязательных параметров
+        if (!name || !setProjectsFunc) return null;
         // иначе создаем отдел
         this[name] = new Department();
         this[name][setProjectsFunc.name] = setProjectsFunc;
         // если переданы другие фун-ции, то назначаем их
-        if (reduceDayFunc !== null) {
+        if (!!reduceDayFunc) {
             this[name].reduceDayOfWorker = reduceDayFunc;
         }
-        if (distributeProjectsFunc !== null) {
+        if (!!distributeProjectsFunc) {
             this[name].distributeProjects = distributeProjectsFunc;
         }
     }
