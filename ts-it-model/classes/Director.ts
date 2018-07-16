@@ -1,11 +1,15 @@
 import { Project } from './Project';
 import { Employee } from './Employee';
+import { Department } from './Department';
 
 export class Director {
     mobileProjects: Project[];
     webProjects: Project[];
     completedProjects: Project[];
     testingProjects: Project[];
+    private webDepartment: Department;
+    private mobileDepartment: Department;
+    private testDepartment: Department;
     constructor(public name: String) {
         this.name = name;
         this.mobileProjects = [];
@@ -14,10 +18,10 @@ export class Director {
         this.testingProjects = [];
     }
     // передача управления компанией директору
-    manage(company) {  
-        this.webDepartment = company.webDepartment;
-        this.mobileDepartment = company.mobileDepartment;
-        this.testDepartment = company.testDepartment;
+    manage(company, ...depts) {  
+        this.webDepartment = company[depts[0]];
+        this.mobileDepartment = company[depts[1]];
+        this.testDepartment = company[depts[2]];
     }
     // ф-ция генерации проектов
     getProjects() {
@@ -76,7 +80,7 @@ export class Director {
             for (let index in this.testingProjects) {
                 let newWorker = new Employee('QA development');
                 this.testDepartment.addNewEmployee(newWorker);
-                if (index > this.testingProjects.length/3) break;
+                if (+index > this.testingProjects.length/3) break;
             }
         }
     }

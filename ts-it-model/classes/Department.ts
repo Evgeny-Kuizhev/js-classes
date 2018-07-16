@@ -1,10 +1,12 @@
 import { Employee } from './Employee';
+import { Project } from './Project';
 
 
 export class Department {
     freeEmployees: Employee[];
     busyEmployees: Employee[];
     firedEmployees: Employee[];
+    testingProjects: Project[];
     constructor() {
         this.freeEmployees = [];
         this.busyEmployees = [];
@@ -78,7 +80,7 @@ export class Department {
                 // ищем разработчика с самым маленьким опытом
                 if (workers[i].skils < minSkils) {
                     minSkils = workers[i].skils;
-                    index = i;
+                    index = +i;
                 }
             }
         }

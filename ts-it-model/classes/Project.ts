@@ -1,8 +1,8 @@
 export class Project {
     id: Number;
-    daysLeftToComplete: Number;
+    daysLeftToComplete: number;
     public static count = 0;
-    constructor(public complexity) {
+    constructor(public complexity: number) {
         this.id = Project.count++;
         this.complexity = complexity;
         this.daysLeftToComplete = complexity;

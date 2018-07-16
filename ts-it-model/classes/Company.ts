@@ -2,7 +2,7 @@ import { Department } from './Department';
 import { Director } from './Director';
 
 export class Company {
-    constructor(public name: String, public director: Director) {
+    constructor(public name: string, public director: Director) {
         this.name = name;
         this.director = director;
     }

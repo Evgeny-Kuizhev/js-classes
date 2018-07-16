@@ -1,11 +1,11 @@
 export class Employee {
-    id: Number;
-    fired: Boolean;
-    skils: Number;
-    daysIdle: Number;
+    id: number;
+    fired: boolean;
+    skils: number;
+    daysIdle: number;
     currProject: any;
     public static count = 0;
-    constructor(public special: String) {
+    constructor(public special: string) {
         this.id = Employee.count++;
         this.fired = false;
         this.skils = 0;
