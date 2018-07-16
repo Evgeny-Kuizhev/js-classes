@@ -1,9 +1,11 @@
+import { Project } from './Project';
+
 export class Employee {
     id: number;
     fired: boolean;
     skils: number;
     daysIdle: number;
-    currProject: any;
+    currProject: Project;
     public static count = 0;
     constructor(public special: string) {
         this.id = Employee.count++;

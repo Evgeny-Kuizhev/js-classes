@@ -1,5 +1,5 @@
 export class Project {
-    id: Number;
+    id: number;
     daysLeftToComplete: number;
     public static count = 0;
     constructor(public complexity: number) {

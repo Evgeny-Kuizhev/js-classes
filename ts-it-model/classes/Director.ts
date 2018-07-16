@@ -10,7 +10,7 @@ export class Director {
     private webDepartment: Department;
     private mobileDepartment: Department;
     private testDepartment: Department;
-    constructor(public name: String) {
+    constructor(public name: string) {
         this.name = name;
         this.mobileProjects = [];
         this.webProjects = [];
